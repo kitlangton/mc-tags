@@ -1,5 +1,13 @@
 .App {
-  margin: 80px;
+  margin:40px;
+}
+
+.editor {
+  background-color: white;
+  padding: 10px;
+}
+body {
+  background-color: lightgray;
 }
 
 .suggestions {

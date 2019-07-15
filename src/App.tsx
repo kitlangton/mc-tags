@@ -155,6 +155,7 @@ class App extends React.Component {
   render = () => (
     <div className="App">
       <Editor
+        className="editor"
         value={this.state.value}
         onChange={this.onChange}
         onKeyDown={this.onKeyDown}
