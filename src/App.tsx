@@ -118,29 +118,46 @@ class App extends React.Component {
       .moveForward()
   }
 
-  onKeyDown: EventHook = (event: any, editor, next) => {
+  dumbAndroid = () => {
+    this.setState({ showSuggestions: true }, () => {
+      setTimeout(() => {
+        this.editor!.insertText('/')
+        this.editor!.focus()
+      }, 50)
+    })
+  }
+
+  onKeyDown: EventHook = (e: any, editor, next) => {
+    let event: KeyboardEvent = e
+
     if (this.state.showSuggestions) {
-      if (event.key == 'Enter') {
+      if (event.key === 'Enter') {
         this.enterSubject.next('ENTER')
+        event.preventDefault()
         return
       }
-      if (event.key == 'ArrowUp') {
+      if (event.key === 'ArrowUp') {
         this.enterSubject.next('UP')
         event.preventDefault()
         return
       }
-      if (event.key == 'ArrowDown') {
+      if (event.key === 'ArrowDown') {
         this.enterSubject.next('DOWN')
         event.preventDefault()
         return
       }
     }
 
-    if (event.key == '/') {
+    if (event.key === '/') {
       this.setState({ showSuggestions: true })
     }
 
     next()
+  }
+
+  onInput = (e: any) => {
+    e.persist()
+    console.log('INPUT', e)
   }
 
   renderBlock = (props: RenderInlineProps, editor: any, next: any) => {
@@ -160,11 +177,15 @@ class App extends React.Component {
         onChange={this.onChange}
         onKeyDown={this.onKeyDown}
         onBlur={this.handleBlur}
+        onInput={this.onInput}
         ref={editor => (this.editor = editor)}
         renderInline={this.renderBlock}
         schema={schema}
         autoFocus
+        autoCorrect={false}
       />
+
+      <button onClick={this.dumbAndroid}>I'M DUMB</button>
 
       {this.state.showSuggestions && (
         <Suggestions
